@@ -8,6 +8,10 @@ It only searches. It never books or pays.
 $ python -m flight_agent "LAX to New York on December 15"
 ```
 
+Or use the web page: `streamlit run app.py`. **New here? Read [docs/DEMO-GUIDE.md](docs/DEMO-GUIDE.md)** (plain language).
+
+![The web UI: results with bag fees, then how the agent worked](docs/screenshots/1-results.png)
+
 ## The problem
 
 Finding a cheap flight means checking several sites, then discovering bag fees and basic-economy
@@ -73,12 +77,12 @@ at most once, web search is capped at 6 queries per call, and clarifying questio
 | 2. Orchestration | `flight_agent/agent.py`: 7 steps, shared `AgentState`, preferences memory, step/time/retry limits |
 | 3. Tools | Claude web search, airport lookup (`airports.py`), bag-fee RAG (`rag/`), currency conversion and cache (`store.py`) |
 | 4. RAG | `knowledge/*.md` + `rag/retriever.py`: section chunking, query rewriting (synonyms), airline metadata filter, BM25 ranking, citations |
-| 5. Observability | `tracing.py`: per-run trace with spans, every LLM call (full prompt, response, tokens, cost), every tool call |
-| 6. Evaluation | `evals/`: 15-case dataset, automatic scoring, v1 vs v2 comparison with a regression gate; `tests/`: 27 tests run in CI |
+| 5. Observability | `tracing.py`: per-run trace with spans, every LLM call (full prompt, response, tokens, cost), every tool call; sample traces in `traces/examples/`; trace viewer in the web UI |
+| 6. Evaluation | `evals/`: 15-case dataset, automatic scoring, v1 vs v2 comparison with a regression gate; `tests/`: 28 tests run in CI |
 | 7. Guardrails | `guardrails.py`: input checks, web-text sanitising, offer validation, output check; refusal fallback model; fallback chain |
 | 8. Performance & cost | Cost and latency measured per run; 30-minute cache; Haiku on cheap steps; prompt caching on the search prompt |
-| 9. Production | Modular package, `config.yaml`, env-var secrets, `Dockerfile`, GitHub Actions CI |
-| 10. Demo | See "Demo" below |
+| 9. Production | Modular package, `config.yaml`, env-var secrets, `Dockerfile`, GitHub Actions CI, web UI (`app.py`) |
+| 10. Demo | Web UI + [demo script](docs/DEMO-GUIDE.md) |
 
 ## Run it
 
@@ -108,6 +112,16 @@ python -m flight_agent --check-key
 ```bash
 python -m flight_agent "LAX to New York on December 15"
 ```
+
+**Web UI** (the easiest way to demo)
+
+```bash
+streamlit run app.py
+```
+
+Opens http://localhost:8501: search box, example buttons (including the tricky inputs), preferences,
+results with bag fees and sources, and a "How the agent worked" panel (steps, tool calls, model calls,
+time, cost, full trace). A "Past runs" tab lists every trace.
 
 **Preferences (memory)**
 
@@ -162,21 +176,25 @@ _Filled in after the eval runs: see `evals/results/v1.md`, `evals/results/v2.md`
 
 **Manual check:** for 3 trips, the agent's cheapest price compared with Google Flights: _to fill in_.
 
+**Measured (live, Nov 24 2026):** LAX → New York fresh search 27.1 s, $0.065 (4 web searches);
+the same trip from cache 1.1 s, $0.0002. Refusals cost $0–0.0002 and take about 1 s. Traces in `traces/examples/`.
+
 ## Limitations (honest list)
 
 - Prices come from web search results, not a booking API, so some sites hide prices from search and results can be incomplete.
+- Many prices come from airline route pages ("from $179"), so times and stops are often unknown and prices are flagged "double-check".
 - Bag fees in `knowledge/` are based on published 2025 policies and are **not re-verified**. Budget airlines price bags dynamically. Always check the airline's page.
 - The airport list covers about 80 major airports.
 - Currency rates in `config.yaml` are fixed approximations.
 
 ## Next steps
 
-A real flight-price API, flexible dates (±3 days), price-drop alerts, an MCP server for the tools, a web UI,
+A real flight-price API, flexible dates (±3 days), price-drop alerts, an MCP server for the tools, a hosted web UI,
 a hosted tracing tool (Langfuse), an LLM-as-judge for answer quality, and live refresh of the bag-fee knowledge base.
 
 ## Demo
 
-A 3-minute recording that shows:
+Script with timings: [docs/DEMO-GUIDE.md](docs/DEMO-GUIDE.md). A 3-minute recording that shows:
 1. The problem
 2. A live run with a suitcase preference
 3. A trace file

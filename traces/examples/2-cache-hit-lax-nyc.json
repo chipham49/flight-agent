@@ -1,0 +1,301 @@
+{
+  "trace_id": "20261124-103013-aff0a2",
+  "started_at": "2026-11-24T10:30:13.986133+00:00",
+  "input": "LAX to New York on December 15",
+  "metadata": {
+    "prompt_version": "v1",
+    "models": {
+      "parse": "claude-haiku-5-5",
+      "extract": "claude-haiku-5-5",
+      "search": "claude-sonnet-5-5"
+    }
+  },
+  "spans": [
+    {
+      "name": "guard_input",
+      "start_ms": 35.029207000008,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.0
+    },
+    {
+      "name": "parse",
+      "start_ms": 35.066507999999885,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 1104.7
+    },
+    {
+      "name": "load_memory",
+      "start_ms": 1139.7973900000125,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.3
+    },
+    {
+      "name": "search",
+      "start_ms": 1140.063209999994,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.7
+    },
+    {
+      "name": "enrich",
+      "start_ms": 1140.7415930000013,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.0
+    },
+    {
+      "name": "rank",
+      "start_ms": 1140.789202999997,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.0
+    },
+    {
+      "name": "respond",
+      "start_ms": 1140.816741000009,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.0
+    }
+  ],
+  "llm_calls": [
+    {
+      "step": "parse",
+      "model": "claude-haiku-5-5",
+      "system": "You turn a traveller's message into structured trip details.\n\nToday's date is 2026-11-24. Resolve relative dates (\"next Friday\", \"Dec 10\") to YYYY-MM-DD,\nchoosing the next future occurrence. A trip with no return date is one-way.\n\nRules:\n- is_flight_request is false if the message is not about finding a flight.\n- Copy city or airport names as the user wrote them; do not guess a city that was not mentioned.\n- If the user says \"from home\", \"my usual airport\" or similar, set uses_home_airport true and origin null.\n- passengers defaults to 1 and cabin to \"economy\" when not stated.\n- List in `missing` any of origin, destination, depart_date that the user did not give\n  (do not list origin when uses_home_airport is true). A month without a day (\"in March\") counts as missing depart_date.\n",
+      "prompt": "LAX to New York on December 15",
+      "response": {
+        "is_flight_request": true,
+        "origin": "LAX",
+        "destination": "New York",
+        "depart_date": "2026-12-15",
+        "return_date": null,
+        "passengers": 1,
+        "cabin": "economy",
+        "uses_home_airport": false,
+        "missing": []
+      },
+      "stop_reason": "end_turn",
+      "input_tokens": 1214,
+      "output_tokens": 85,
+      "cost_usd": 0.000164,
+      "duration_ms": 1104.7,
+      "span": "parse"
+    }
+  ],
+  "tool_calls": [
+    {
+      "span": "load_memory",
+      "tool": "load_preferences",
+      "input": null,
+      "output": {
+        "home_airport": null,
+        "max_stops": null,
+        "checked_bags": 0
+      },
+      "duration_ms": null,
+      "error": null
+    },
+    {
+      "span": "load_memory",
+      "tool": "lookup_airport",
+      "input": "LAX",
+      "output": [
+        [
+          "LAX"
+        ],
+        "Los Angeles (LAX)"
+      ],
+      "duration_ms": null,
+      "error": null
+    },
+    {
+      "span": "load_memory",
+      "tool": "lookup_airport",
+      "input": "New York",
+      "output": [
+        [
+          "JFK",
+          "LGA",
+          "EWR"
+        ],
+        "New York (JFK, LGA, EWR)"
+      ],
+      "duration_ms": null,
+      "error": null
+    },
+    {
+      "span": "search",
+      "tool": "cache_get",
+      "input": "LAX|JFK,LGA,EWR|2026-12-15|None|1|economy",
+      "output": "hit",
+      "duration_ms": null,
+      "error": null
+    },
+    {
+      "span": "enrich",
+      "tool": "rag_checked_bag_fee",
+      "input": {
+        "airline": "American Airlines",
+        "bags": 0
+      },
+      "output": {
+        "fee_usd": 0.0,
+        "source_url": null,
+        "note": "no checked bags requested"
+      },
+      "duration_ms": null,
+      "error": null
+    },
+    {
+      "span": "enrich",
+      "tool": "rag_checked_bag_fee",
+      "input": {
+        "airline": "JetBlue",
+        "bags": 0
+      },
+      "output": {
+        "fee_usd": 0.0,
+        "source_url": null,
+        "note": "no checked bags requested"
+      },
+      "duration_ms": null,
+      "error": null
+    },
+    {
+      "span": "enrich",
+      "tool": "rag_checked_bag_fee",
+      "input": {
+        "airline": "Alaska Airlines",
+        "bags": 0
+      },
+      "output": {
+        "fee_usd": 0.0,
+        "source_url": null,
+        "note": "no checked bags requested"
+      },
+      "duration_ms": null,
+      "error": null
+    },
+    {
+      "span": "enrich",
+      "tool": "rag_checked_bag_fee",
+      "input": {
+        "airline": "Southwest",
+        "bags": 0
+      },
+      "output": {
+        "fee_usd": 0.0,
+        "source_url": null,
+        "note": "no checked bags requested"
+      },
+      "duration_ms": null,
+      "error": null
+    },
+    {
+      "span": "enrich",
+      "tool": "rag_checked_bag_fee",
+      "input": {
+        "airline": "Alaska Airlines",
+        "bags": 0
+      },
+      "output": {
+        "fee_usd": 0.0,
+        "source_url": null,
+        "note": "no checked bags requested"
+      },
+      "duration_ms": null,
+      "error": null
+    }
+  ],
+  "totals": {
+    "duration_ms": 1140.9,
+    "cost_usd": 0.00016,
+    "input_tokens": 1214,
+    "output_tokens": 85,
+    "llm_calls": 1,
+    "tool_calls": 9,
+    "web_searches": 0,
+    "steps": 7,
+    "from_cache": true
+  },
+  "result": {
+    "status": "done",
+    "message": "Cheapest flights: Los Angeles (LAX) -> New York (JFK, LGA, EWR), 2026-12-15 (one-way)\n\n| # | Total (USD) | Fare | Bag fee | Airline | Stops | Depart -> Arrive | Source |\n|---|---|---|---|---|---|---|---|\n| 1 | $168 | $168 | - | American Airlines | nonstop | 07:00 -> 15:29 | https://us.trip.com/flights/airport-lax-city-nyc/ |\n| 2 | $169 | $169 | - | JetBlue | ? | ? -> ? | https://www.jetblue.com/en/flights-from-los-angeles-to-new-york |\n| 3 | $179 | $179 | - | Alaska Airlines | ? | ? -> ? | https://www.alaskaair.com/en/flights-from-los-angeles-to-new-york |\n\nWarnings:\n- #1: Price not quoted word-for-word in the source text; double-check it\n- #2: Price not quoted word-for-word in the source text; double-check it\n- #3: Price not quoted word-for-word in the source text; double-check it\n\n(Results from a recent search, served from cache.)\n\nPrices change fast. Confirm on the source site before booking.",
+    "top_offers": [
+      {
+        "airline": "American Airlines",
+        "price": 168.0,
+        "currency": "USD",
+        "price_usd": 168.0,
+        "origin": "LAX",
+        "destination": "JFK",
+        "depart_date": "2026-12-15",
+        "depart_time": "07:00",
+        "arrive_time": "15:29",
+        "stops": 0,
+        "layover_minutes": null,
+        "fare_type": "Economy",
+        "source_url": "https://us.trip.com/flights/airport-lax-city-nyc/",
+        "source_name": "Trip.com",
+        "bag_fee_usd": 0.0,
+        "bag_fee_source": null,
+        "true_total_usd": 168.0,
+        "warnings": [
+          "Price not quoted word-for-word in the source text; double-check it"
+        ],
+        "price_verified": false
+      },
+      {
+        "airline": "JetBlue",
+        "price": 169.0,
+        "currency": "USD",
+        "price_usd": 169.0,
+        "origin": "LAX",
+        "destination": "JFK",
+        "depart_date": "2026-12-15",
+        "depart_time": null,
+        "arrive_time": null,
+        "stops": null,
+        "layover_minutes": null,
+        "fare_type": "One-way Economy",
+        "source_url": "https://www.jetblue.com/en/flights-from-los-angeles-to-new-york",
+        "source_name": "JetBlue",
+        "bag_fee_usd": 0.0,
+        "bag_fee_source": null,
+        "true_total_usd": 169.0,
+        "warnings": [
+          "Price not quoted word-for-word in the source text; double-check it"
+        ],
+        "price_verified": false
+      },
+      {
+        "airline": "Alaska Airlines",
+        "price": 179.0,
+        "currency": "USD",
+        "price_usd": 179.0,
+        "origin": "LAX",
+        "destination": "JFK",
+        "depart_date": "2026-12-15",
+        "depart_time": null,
+        "arrive_time": null,
+        "stops": null,
+        "layover_minutes": null,
+        "fare_type": "Saver",
+        "source_url": "https://www.alaskaair.com/en/flights-from-los-angeles-to-new-york",
+        "source_name": "Alaska Airlines",
+        "bag_fee_usd": 0.0,
+        "bag_fee_source": null,
+        "true_total_usd": 179.0,
+        "warnings": [
+          "Price not quoted word-for-word in the source text; double-check it"
+        ],
+        "price_verified": false
+      }
+    ],
+    "dropped": []
+  }
+}

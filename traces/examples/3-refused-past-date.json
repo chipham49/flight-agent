@@ -1,0 +1,92 @@
+{
+  "trace_id": "20261124-103225-6ff188",
+  "started_at": "2026-11-24T10:32:25.872726+00:00",
+  "input": "LAX to Boston on January 5 2020",
+  "metadata": {
+    "prompt_version": "v1.1",
+    "models": {
+      "parse": "claude-haiku-5-5",
+      "extract": "claude-haiku-5-5",
+      "search": "claude-sonnet-5-5"
+    }
+  },
+  "spans": [
+    {
+      "name": "guard_input",
+      "start_ms": 42.57848100002093,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.0
+    },
+    {
+      "name": "parse",
+      "start_ms": 42.63306900003272,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 1323.1
+    },
+    {
+      "name": "load_memory",
+      "start_ms": 1365.7923150000215,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.4
+    }
+  ],
+  "llm_calls": [
+    {
+      "step": "parse",
+      "model": "claude-haiku-5-5",
+      "system": "You turn a traveller's message into structured trip details.\n\nToday's date is 2026-11-24. Resolve relative dates (\"next Friday\", \"Dec 10\") to YYYY-MM-DD,\nchoosing the next future occurrence. If the user states a year, keep that exact year,\neven if the date is in the past (never move it into the future). A trip with no return date is one-way.\n\nRules:\n- is_flight_request is false if the message is not about finding a flight.\n- Copy city or airport names as the user wrote them; do not guess a city that was not mentioned.\n- If the user says \"from home\", \"my usual airport\" or similar, set uses_home_airport true and origin null.\n- passengers defaults to 1 and cabin to \"economy\" when not stated.\n- List in `missing` any of origin, destination, depart_date that the user did not give\n  (do not list origin when uses_home_airport is true). A month without a day (\"in March\") counts as missing depart_date.\n",
+      "prompt": "LAX to Boston on January 5 2020",
+      "response": {
+        "is_flight_request": true,
+        "origin": "LAX",
+        "destination": "Boston",
+        "depart_date": "2020-01-05",
+        "return_date": null,
+        "passengers": 1,
+        "cabin": "economy",
+        "uses_home_airport": false,
+        "missing": []
+      },
+      "stop_reason": "end_turn",
+      "input_tokens": 1249,
+      "output_tokens": 82,
+      "cost_usd": 0.000166,
+      "duration_ms": 1323.1,
+      "span": "parse"
+    }
+  ],
+  "tool_calls": [
+    {
+      "span": "load_memory",
+      "tool": "load_preferences",
+      "input": null,
+      "output": {
+        "home_airport": null,
+        "max_stops": null,
+        "checked_bags": 0
+      },
+      "duration_ms": null,
+      "error": null
+    }
+  ],
+  "totals": {
+    "duration_ms": 1366.2,
+    "cost_usd": 0.00017,
+    "input_tokens": 1249,
+    "output_tokens": 82,
+    "llm_calls": 1,
+    "tool_calls": 1,
+    "web_searches": 0,
+    "steps": 3,
+    "from_cache": false
+  },
+  "result": {
+    "status": "refused",
+    "message": "The departure date 2020-01-05 is in the past.",
+    "top_offers": [],
+    "dropped": []
+  }
+}

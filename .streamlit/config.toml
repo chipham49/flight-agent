@@ -1,0 +1,6 @@
+# Streamlit settings for the demo UI
+[browser]
+gatherUsageStats = false   # do not send usage data anywhere
+
+[theme]
+primaryColor = "#2563eb"

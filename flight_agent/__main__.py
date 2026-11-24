@@ -51,8 +51,8 @@ def main():
         prefs = load_preferences()
         for item in args.set:
             key, _, value = item.partition("=")
-            if key not in prefs.model_fields:
-                sys.exit(f"Unknown preference '{key}'. Use: {', '.join(prefs.model_fields)}")
+            if key not in type(prefs).model_fields:
+                sys.exit(f"Unknown preference '{key}'. Use: {', '.join(type(prefs).model_fields)}")
             setattr(prefs, key, None if value.lower() in ("", "none") else
                     (int(value) if key in ("checked_bags", "max_stops") else value.upper()))
         if args.set:
