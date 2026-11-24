@@ -78,7 +78,7 @@ at most once, web search is capped at 6 queries per call, and clarifying questio
 | 3. Tools | Claude web search, airport lookup (`airports.py`), bag-fee RAG (`rag/`), currency conversion and cache (`store.py`) |
 | 4. RAG | `knowledge/*.md` + `rag/retriever.py`: section chunking, query rewriting (synonyms), airline metadata filter, BM25 ranking, citations |
 | 5. Observability | `tracing.py`: per-run trace with spans, every LLM call (full prompt, response, tokens, cost), every tool call; sample traces in `traces/examples/`; trace viewer in the web UI |
-| 6. Evaluation | `evals/`: 15-case dataset, automatic scoring, v1 vs v2 comparison with a regression gate; `tests/`: 28 tests run in CI |
+| 6. Evaluation | `evals/`: 15-case dataset, automatic scoring, v1 vs v2 comparison with a regression gate; `tests/`: 29 tests run in CI |
 | 7. Guardrails | `guardrails.py`: input checks, web-text sanitising, offer validation, output check; refusal fallback model; fallback chain |
 | 8. Performance & cost | Cost and latency measured per run; 30-minute cache; Haiku on cheap steps; prompt caching on the search prompt |
 | 9. Production | Modular package, `config.yaml`, env-var secrets, `Dockerfile`, GitHub Actions CI, web UI (`app.py`) |
@@ -94,6 +94,9 @@ cloud sessions reserve `ANTHROPIC_*` names for Claude Code itself. Locally:
 ```bash
 export FLIGHT_AGENT_API_KEY=your-key-here
 ```
+
+Or, easier: copy `.env.example` to a file named `.env` in the project folder and put your key in it.
+The agent reads it automatically, and git ignores `.env`, so the key is never uploaded.
 
 **2. Install**
 

@@ -62,3 +62,15 @@ def test_bag_fee_lookup():
     assert checked_bag_fee("Delta", 1)["fee_usd"] == 35
     assert checked_bag_fee("Delta", 2)["fee_usd"] == 80
     assert checked_bag_fee("Unknown Air", 1) is None
+
+
+def test_api_key_can_come_from_env_file(tmp_path, monkeypatch):
+    from flight_agent import config
+    monkeypatch.delenv("FLIGHT_AGENT_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.setattr(config, "ROOT", tmp_path)
+    assert config.api_key() is None
+    (tmp_path / ".env").write_text("FLIGHT_AGENT_API_KEY=your-key-here\n")
+    assert config.api_key() is None  # the placeholder doesn't count
+    (tmp_path / ".env").write_text('FLIGHT_AGENT_API_KEY="test-123"\n')
+    assert config.api_key() == "test-123"

@@ -21,7 +21,21 @@ Every run writes a **trace file**, a full diary of what happened, how long it to
 
 ---
 
-## 2. Start the app (the easy way: the web page)
+## 2a. Easiest: let Claude Code run it for you
+
+1. Install the **Claude desktop app** from **claude.ai/download** and sign in.
+2. Download the project: on GitHub click **Code → Download ZIP**, then unzip it (e.g. to your Desktop).
+3. **Add your key (once):** in the project folder, make a copy of `.env.example` and name it `.env`.
+   Open `.env` in Notepad (Windows) or TextEdit (Mac), replace `your-key-here` with your key, and save.
+   Never paste the key into a chat.
+4. In the Claude app, open the **Code** tab, choose the unzipped project folder, and type:
+
+   > Set up and start the demo: install the requirements, check my API key with `python -m flight_agent --check-key`, then run `streamlit run app.py` and tell me the address to open.
+
+5. Claude asks permission before running commands: click **Allow**. Your browser opens the app.
+6. When you're done, type: *"Stop the app."*
+
+## 2b. Or start it yourself in a terminal
 
 You need Python installed and your API key set (see the README, "Run it").
 
@@ -63,11 +77,11 @@ and run **LAX → New York** once so the cache is warm (do this within 30 minute
 | **0:20–1:20** Live run | Click **🌲 SFO → Seattle** (fresh, ~30 s), then **✈️ LAX → New York** (cached) | "It understood my text, used my saved preference of 1 bag, searched the web, and added the bag fee from its airline knowledge base. Every price has a source link and warnings. Running a trip again uses the cache: about 1 second and almost free, compared with 30 seconds and 7 cents." |
 | | Click **📅 Past date** and **🛑 Booking request** | "Guardrails: a past date is rejected and a booking request is refused before any money is spent." |
 | **1:20–2:00** Trace | Scroll to **How the agent worked**, open **Full trace file** | "Every run is traced: each step, each tool call, each AI call with its prompt, tokens, time and cost. Here's the search step: 6 web searches, the extract step, and the bag-fee lookup." |
-| **2:00–2:40** Evals | Open `evals/results/compare_v1_v2.md` on GitHub | "I test it with a fixed set of cases and automatic scoring. Version 1 failed on X; I fixed it, and version 2 improved Y. 28 automatic tests run on every pull request." |
+| **2:00–2:40** Evals | Open `evals/results/compare_v1_v2.md` on GitHub | "I test it with a fixed set of cases and automatic scoring. Version 1 failed on X; I fixed it, and version 2 improved Y. 29 automatic tests run on every pull request." |
 | **2:40–3:00** Next steps | README "Next steps" | "Next: a real flight-price API, flexible dates, and price alerts." |
 
 If evals haven't been run yet, show the **Tests** instead: run `python -m pytest -q` in the terminal
-(28 passed), and say the eval dataset is ready in `evals/dataset.jsonl`.
+(29 passed), and say the eval dataset is ready in `evals/dataset.jsonl`.
 
 ---
 
@@ -80,7 +94,7 @@ If evals haven't been run yet, show the **Tests** instead: run `python -m pytest
 | 3. Tools | Web search, airport lookup, bag-fee lookup, currency table, cache: see "Tool calls" in the app |
 | 4. RAG | `knowledge/` (10 airline notes + general rules) + `flight_agent/rag/`: the bag-fee column in results |
 | 5. Observability | "How the agent worked" panel, `traces/examples/*.json` |
-| 6. Evaluation | `evals/` (dataset, scorer, v1 vs v2 compare), `tests/` (28 tests), CI on GitHub |
+| 6. Evaluation | `evals/` (dataset, scorer, v1 vs v2 compare), `tests/` (29 tests), CI on GitHub |
 | 7. Guardrails | Past date, booking, vague examples; "Offers rejected by the guardrails" list |
 | 8. Cost | Time and $ on every run, cache (1 s vs 30 s), cheap model for simple steps |
 | 9. Production | `config.yaml`, `.env.example`, `Dockerfile`, CI, tests, web UI |
