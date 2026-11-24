@@ -226,7 +226,7 @@ a hosted tracing tool (Langfuse), an LLM-as-judge for answer quality, and live r
 
 ## Demo
 
-Script with timings: [docs/DEMO-GUIDE.md](docs/DEMO-GUIDE.md). A 3-minute recording that shows:
+Script with timings: [docs/DEMO-GUIDE.md](docs/DEMO-GUIDE.md). A 3-minute live demo that shows:
 1. The problem
 2. A live run with a suitcase preference
 3. A trace file
