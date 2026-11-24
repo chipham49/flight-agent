@@ -95,6 +95,12 @@ export ANTHROPIC_API_KEY=your-key-here
 pip install -r requirements.txt
 ```
 
+**Check the key works** (free: it only lists models, no tokens used)
+
+```bash
+python -m flight_agent --check-key
+```
+
 **3. Search**
 
 ```bash

@@ -5,6 +5,7 @@ Other commands:
   python -m flight_agent --set home_airport=LAX          remember a preference
   python -m flight_agent --set checked_bags=1 --set max_stops=1
   python -m flight_agent "..." --no-cache                skip the cache
+  python -m flight_agent --check-key                     test the API key (free: lists models)
 """
 import argparse
 import os
@@ -14,14 +15,38 @@ from .config import load_config
 from .store import load_preferences, save_preferences
 
 
+def check_key():
+    """Free check that ANTHROPIC_API_KEY works and can see the models in config.yaml."""
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        sys.exit("ANTHROPIC_API_KEY is not set in this shell. Add it as an environment variable (see README).")
+    import anthropic
+
+    try:
+        available = {m.id for m in anthropic.Anthropic().models.list()}
+    except anthropic.AuthenticationError:
+        sys.exit("The API key was rejected (401). Check it was copied fully and is not revoked.")
+    except anthropic.PermissionDeniedError:
+        sys.exit("The API key has no permission for this (403). Check the key's workspace in the Console.")
+    except anthropic.APIConnectionError as e:
+        sys.exit(f"Could not reach the Anthropic API: {e}")
+    print("API key works.")
+    for step, model in load_config()["models"].items():
+        print(f"  {step:8} {model:22} {'OK' if model in available else 'NOT AVAILABLE to this key'}")
+
+
 def main():
     ap = argparse.ArgumentParser(prog="flight_agent", description="Find the 3 cheapest flights for a trip.")
     ap.add_argument("trip", nargs="?", help='e.g. "LAX to New York, Dec 10"')
     ap.add_argument("--no-cache", action="store_true", help="always search fresh")
     ap.add_argument("--prefs", action="store_true", help="show saved preferences")
+    ap.add_argument("--check-key", action="store_true", help="test the API key (free, no tokens used)")
     ap.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
                     help="save a preference: home_airport, checked_bags, max_stops")
     args = ap.parse_args()
+
+    if args.check_key:
+        check_key()
+        return
 
     if args.set or args.prefs:
         prefs = load_preferences()
