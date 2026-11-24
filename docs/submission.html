@@ -8,10 +8,9 @@
 
 <script>
   /* ============================================================
-     SETTING: the branch that holds the project.
-     Change it to "main" after you merge the pull request.
+     SETTING: the branch the GitHub links point to.
      ============================================================ */
-  var BRANCH = "claude/clever-mendel-6trq90";
+  var BRANCH = "main";
 
   var REPO_URL = "https://github.com/chipham49/flight-agent";
 </script>
@@ -172,11 +171,11 @@
       <strong>checked-bag fees</strong> to show the true total, flags risky results and links every price to its source.
       It only searches. It never books or pays.</p>
     <div class="actions">
-      <a class="btn primary" id="repo-btn" href="https://github.com/chipham49/flight-agent/tree/claude/clever-mendel-6trq90" target="_blank" rel="noopener">
+      <a class="btn primary" id="repo-btn" href="https://github.com/chipham49/flight-agent" target="_blank" rel="noopener">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub repository
       </a>
-      <a class="btn" data-path="README.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/README.md" target="_blank" rel="noopener">README</a>
+      <a class="btn" data-path="README.md" href="https://github.com/chipham49/flight-agent/blob/main/README.md" target="_blank" rel="noopener">README</a>
     </div>
   </div>
 </header>
@@ -302,8 +301,8 @@
           <li>A workflow diagram and a table of design decisions with reasons (see <a href="#architecture">Architecture</a>).</li>
         </ul>
         <div class="evidence">
-          <a data-path="README.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/README.md" target="_blank" rel="noopener">README.md</a>
-          <a data-path="docs/project-plan.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/docs/project-plan.md" target="_blank" rel="noopener">docs/project-plan.md</a>
+          <a data-path="README.md" href="https://github.com/chipham49/flight-agent/blob/main/README.md" target="_blank" rel="noopener">README.md</a>
+          <a data-path="docs/project-plan.md" href="https://github.com/chipham49/flight-agent/blob/main/docs/project-plan.md" target="_blank" rel="noopener">docs/project-plan.md</a>
         </div>
       </article>
 
@@ -317,10 +316,10 @@
           <li>Any unexpected failure ends the run safely with a clear message, and the trace is still saved.</li>
         </ul>
         <div class="evidence">
-          <a data-path="flight_agent/agent.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/agent.py" target="_blank" rel="noopener">flight_agent/agent.py</a>
-          <a data-path="flight_agent/state.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/state.py" target="_blank" rel="noopener">flight_agent/state.py</a>
-          <a data-path="flight_agent/store.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/store.py" target="_blank" rel="noopener">flight_agent/store.py</a>
-          <a data-path="config.yaml" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/config.yaml" target="_blank" rel="noopener">config.yaml</a>
+          <a data-path="flight_agent/agent.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/agent.py" target="_blank" rel="noopener">flight_agent/agent.py</a>
+          <a data-path="flight_agent/state.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/state.py" target="_blank" rel="noopener">flight_agent/state.py</a>
+          <a data-path="flight_agent/store.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/store.py" target="_blank" rel="noopener">flight_agent/store.py</a>
+          <a data-path="config.yaml" href="https://github.com/chipham49/flight-agent/blob/main/config.yaml" target="_blank" rel="noopener">config.yaml</a>
         </div>
         <p class="gap"><b>Not done:</b> no agent framework (deliberately kept as plain Python), and no chat memory across conversations.</p>
       </article>
@@ -335,9 +334,9 @@
           <li>Every tool call is recorded in the trace with its input, output, time and errors.</li>
         </ul>
         <div class="evidence">
-          <a data-path="flight_agent/llm.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/llm.py" target="_blank" rel="noopener">flight_agent/llm.py</a>
-          <a data-path="flight_agent/airports.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/airports.py" target="_blank" rel="noopener">flight_agent/airports.py</a>
-          <a data-path="flight_agent/store.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/store.py" target="_blank" rel="noopener">flight_agent/store.py</a>
+          <a data-path="flight_agent/llm.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/llm.py" target="_blank" rel="noopener">flight_agent/llm.py</a>
+          <a data-path="flight_agent/airports.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/airports.py" target="_blank" rel="noopener">flight_agent/airports.py</a>
+          <a data-path="flight_agent/store.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/store.py" target="_blank" rel="noopener">flight_agent/store.py</a>
         </div>
         <p class="gap"><b>Not done:</b> a paid flight-price API and an MCP server for the tools. Both are listed under next steps.</p>
       </article>
@@ -351,8 +350,8 @@
           <li>The eval's bag-fee case went from <strong>0% to 100%</strong> between v1 and v3.</li>
         </ul>
         <div class="evidence">
-          <a data-path="knowledge" data-dir="1" href="https://github.com/chipham49/flight-agent/tree/claude/clever-mendel-6trq90/knowledge" target="_blank" rel="noopener">knowledge/</a>
-          <a data-path="flight_agent/rag/retriever.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/rag/retriever.py" target="_blank" rel="noopener">flight_agent/rag/retriever.py</a>
+          <a data-path="knowledge" data-dir="1" href="https://github.com/chipham49/flight-agent/tree/main/knowledge" target="_blank" rel="noopener">knowledge/</a>
+          <a data-path="flight_agent/rag/retriever.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/rag/retriever.py" target="_blank" rel="noopener">flight_agent/rag/retriever.py</a>
         </div>
         <p class="gap"><b>Not done:</b> reranking with a model and multi-hop retrieval. The fee notes are based on 2025 policies and are not refreshed live.</p>
       </article>
@@ -367,9 +366,9 @@
           <li>6 example traces are committed: fresh search, cache hit, past date, booking refusal, clarifying question, clarified search with a bag.</li>
         </ul>
         <div class="evidence">
-          <a data-path="flight_agent/tracing.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/tracing.py" target="_blank" rel="noopener">flight_agent/tracing.py</a>
-          <a data-path="traces/examples" data-dir="1" href="https://github.com/chipham49/flight-agent/tree/claude/clever-mendel-6trq90/traces/examples" target="_blank" rel="noopener">traces/examples/</a>
-          <a data-path="traces/examples/1-fresh-search-lax-nyc.json" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/traces/examples/1-fresh-search-lax-nyc.json" target="_blank" rel="noopener">1-fresh-search-lax-nyc.json</a>
+          <a data-path="flight_agent/tracing.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/tracing.py" target="_blank" rel="noopener">flight_agent/tracing.py</a>
+          <a data-path="traces/examples" data-dir="1" href="https://github.com/chipham49/flight-agent/tree/main/traces/examples" target="_blank" rel="noopener">traces/examples/</a>
+          <a data-path="traces/examples/1-fresh-search-lax-nyc.json" href="https://github.com/chipham49/flight-agent/blob/main/traces/examples/1-fresh-search-lax-nyc.json" target="_blank" rel="noopener">1-fresh-search-lax-nyc.json</a>
         </div>
         <p class="gap"><b>Not done:</b> a hosted tracing tool such as Langfuse. Traces are local JSON files.</p>
       </article>
@@ -385,12 +384,12 @@
           <li>Eval cost is controlled: 3 web searches per search and no retry during evals, and a run stops at $1.50.</li>
         </ul>
         <div class="evidence">
-          <a data-path="evals/dataset.jsonl" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/evals/dataset.jsonl" target="_blank" rel="noopener">evals/dataset.jsonl</a>
-          <a data-path="evals/run_evals.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/evals/run_evals.py" target="_blank" rel="noopener">evals/run_evals.py</a>
-          <a data-path="evals/compare.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/evals/compare.py" target="_blank" rel="noopener">evals/compare.py</a>
-          <a data-path="evals/results/compare_v1_v3.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/evals/results/compare_v1_v3.md" target="_blank" rel="noopener">compare_v1_v3.md</a>
-          <a data-path="tests" data-dir="1" href="https://github.com/chipham49/flight-agent/tree/claude/clever-mendel-6trq90/tests" target="_blank" rel="noopener">tests/</a>
-          <a data-path=".github/workflows/ci.yml" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/.github/workflows/ci.yml" target="_blank" rel="noopener">.github/workflows/ci.yml</a>
+          <a data-path="evals/dataset.jsonl" href="https://github.com/chipham49/flight-agent/blob/main/evals/dataset.jsonl" target="_blank" rel="noopener">evals/dataset.jsonl</a>
+          <a data-path="evals/run_evals.py" href="https://github.com/chipham49/flight-agent/blob/main/evals/run_evals.py" target="_blank" rel="noopener">evals/run_evals.py</a>
+          <a data-path="evals/compare.py" href="https://github.com/chipham49/flight-agent/blob/main/evals/compare.py" target="_blank" rel="noopener">evals/compare.py</a>
+          <a data-path="evals/results/compare_v1_v3.md" href="https://github.com/chipham49/flight-agent/blob/main/evals/results/compare_v1_v3.md" target="_blank" rel="noopener">compare_v1_v3.md</a>
+          <a data-path="tests" data-dir="1" href="https://github.com/chipham49/flight-agent/tree/main/tests" target="_blank" rel="noopener">tests/</a>
+          <a data-path=".github/workflows/ci.yml" href="https://github.com/chipham49/flight-agent/blob/main/.github/workflows/ci.yml" target="_blank" rel="noopener">.github/workflows/ci.yml</a>
         </div>
         <p class="gap"><b>Not done:</b> single runs of 8 cases only (web search varies between runs), and no LLM-as-judge for answer quality.</p>
       </article>
@@ -406,9 +405,9 @@
           <li><strong>Output:</strong> every answer carries a disclaimer and a source link for every price.</li>
         </ul>
         <div class="evidence">
-          <a data-path="flight_agent/guardrails.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/flight_agent/guardrails.py" target="_blank" rel="noopener">flight_agent/guardrails.py</a>
-          <a data-path="traces/examples/3-refused-past-date.json" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/traces/examples/3-refused-past-date.json" target="_blank" rel="noopener">3-refused-past-date.json</a>
-          <a data-path="traces/examples/4-refused-booking.json" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/traces/examples/4-refused-booking.json" target="_blank" rel="noopener">4-refused-booking.json</a>
+          <a data-path="flight_agent/guardrails.py" href="https://github.com/chipham49/flight-agent/blob/main/flight_agent/guardrails.py" target="_blank" rel="noopener">flight_agent/guardrails.py</a>
+          <a data-path="traces/examples/3-refused-past-date.json" href="https://github.com/chipham49/flight-agent/blob/main/traces/examples/3-refused-past-date.json" target="_blank" rel="noopener">3-refused-past-date.json</a>
+          <a data-path="traces/examples/4-refused-booking.json" href="https://github.com/chipham49/flight-agent/blob/main/traces/examples/4-refused-booking.json" target="_blank" rel="noopener">4-refused-booking.json</a>
         </div>
       </article>
 
@@ -421,8 +420,8 @@
           <li>Refusals and clarifying questions take about 1 second and cost at most $0.0002.</li>
         </ul>
         <div class="evidence">
-          <a data-path="traces/examples/2-cache-hit-lax-nyc.json" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/traces/examples/2-cache-hit-lax-nyc.json" target="_blank" rel="noopener">2-cache-hit-lax-nyc.json</a>
-          <a data-path="config.yaml" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/config.yaml" target="_blank" rel="noopener">config.yaml</a>
+          <a data-path="traces/examples/2-cache-hit-lax-nyc.json" href="https://github.com/chipham49/flight-agent/blob/main/traces/examples/2-cache-hit-lax-nyc.json" target="_blank" rel="noopener">2-cache-hit-lax-nyc.json</a>
+          <a data-path="config.yaml" href="https://github.com/chipham49/flight-agent/blob/main/config.yaml" target="_blank" rel="noopener">config.yaml</a>
         </div>
       </article>
 
@@ -435,10 +434,10 @@
           <li>GitHub Actions CI runs the tests and the eval regression gate.</li>
         </ul>
         <div class="evidence">
-          <a data-path="app.py" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/app.py" target="_blank" rel="noopener">app.py</a>
-          <a data-path="Dockerfile" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/Dockerfile" target="_blank" rel="noopener">Dockerfile</a>
-          <a data-path=".env.example" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/.env.example" target="_blank" rel="noopener">.env.example</a>
-          <a data-path="requirements.txt" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/requirements.txt" target="_blank" rel="noopener">requirements.txt</a>
+          <a data-path="app.py" href="https://github.com/chipham49/flight-agent/blob/main/app.py" target="_blank" rel="noopener">app.py</a>
+          <a data-path="Dockerfile" href="https://github.com/chipham49/flight-agent/blob/main/Dockerfile" target="_blank" rel="noopener">Dockerfile</a>
+          <a data-path=".env.example" href="https://github.com/chipham49/flight-agent/blob/main/.env.example" target="_blank" rel="noopener">.env.example</a>
+          <a data-path="requirements.txt" href="https://github.com/chipham49/flight-agent/blob/main/requirements.txt" target="_blank" rel="noopener">requirements.txt</a>
         </div>
         <p class="gap"><b>Not done:</b> the web UI is not deployed online. It runs locally with <code>streamlit run app.py</code>.</p>
       </article>
@@ -450,7 +449,7 @@
           <li>A plain-language demo guide with timings and the exact inputs to use.</li>
         </ul>
         <div class="evidence">
-          <a data-path="docs/DEMO-GUIDE.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/docs/DEMO-GUIDE.md" target="_blank" rel="noopener">docs/DEMO-GUIDE.md</a>
+          <a data-path="docs/DEMO-GUIDE.md" href="https://github.com/chipham49/flight-agent/blob/main/docs/DEMO-GUIDE.md" target="_blank" rel="noopener">docs/DEMO-GUIDE.md</a>
         </div>
       </article>
 
@@ -495,10 +494,10 @@
       evidence, not a guarantee. "Price quoted word-for-word in the source" stayed at 0%, because search snippets rarely quote the exact price,
       so every price carries a "double-check" warning. v3 is a little slower and more expensive than v1 because it finds and checks more offers.</p>
     <div class="evidence">
-      <a data-path="evals/results/v1.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/evals/results/v1.md" target="_blank" rel="noopener">v1.md</a>
-      <a data-path="evals/results/v2.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/evals/results/v2.md" target="_blank" rel="noopener">v2.md</a>
-      <a data-path="evals/results/v3.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/evals/results/v3.md" target="_blank" rel="noopener">v3.md</a>
-      <a data-path="evals/results/compare_v1_v3.md" href="https://github.com/chipham49/flight-agent/blob/claude/clever-mendel-6trq90/evals/results/compare_v1_v3.md" target="_blank" rel="noopener">compare_v1_v3.md</a>
+      <a data-path="evals/results/v1.md" href="https://github.com/chipham49/flight-agent/blob/main/evals/results/v1.md" target="_blank" rel="noopener">v1.md</a>
+      <a data-path="evals/results/v2.md" href="https://github.com/chipham49/flight-agent/blob/main/evals/results/v2.md" target="_blank" rel="noopener">v2.md</a>
+      <a data-path="evals/results/v3.md" href="https://github.com/chipham49/flight-agent/blob/main/evals/results/v3.md" target="_blank" rel="noopener">v3.md</a>
+      <a data-path="evals/results/compare_v1_v3.md" href="https://github.com/chipham49/flight-agent/blob/main/evals/results/compare_v1_v3.md" target="_blank" rel="noopener">compare_v1_v3.md</a>
     </div>
   </section>
 
