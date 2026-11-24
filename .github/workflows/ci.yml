@@ -1,0 +1,25 @@
+name: tests
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      # Free: uses a fake LLM, no API key needed
+      - run: python -m pytest -q
+      # Regression gate: if a pull request adds new eval results, they must not be worse than v1
+      - name: Eval regression check
+        run: |
+          latest=$(ls evals/results/v*.json 2>/dev/null | sed 's#.*/##; s#\.json##' | sort -V | tail -1)
+          if [ -n "$latest" ] && [ "$latest" != "v1" ] && [ -f evals/results/v1.json ]; then
+            python -m evals.compare v1 "$latest"
+          else
+            echo "Not enough eval runs to compare yet."
+          fi

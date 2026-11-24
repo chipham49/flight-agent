@@ -1,0 +1,96 @@
+{
+  "trace_id": "20261124-103139-d31707",
+  "started_at": "2026-11-24T10:31:39.708993+00:00",
+  "input": "cheap flight somewhere warm",
+  "metadata": {
+    "prompt_version": "v1",
+    "models": {
+      "parse": "claude-haiku-5-5",
+      "extract": "claude-haiku-5-5",
+      "search": "claude-sonnet-5-5"
+    }
+  },
+  "spans": [
+    {
+      "name": "guard_input",
+      "start_ms": 36.89198500001112,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.0
+    },
+    {
+      "name": "parse",
+      "start_ms": 36.92781500001274,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 1095.2
+    },
+    {
+      "name": "load_memory",
+      "start_ms": 1132.11018100003,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.1
+    }
+  ],
+  "llm_calls": [
+    {
+      "step": "parse",
+      "model": "claude-haiku-5-5",
+      "system": "You turn a traveller's message into structured trip details.\n\nToday's date is 2026-11-24. Resolve relative dates (\"next Friday\", \"Dec 10\") to YYYY-MM-DD,\nchoosing the next future occurrence. A trip with no return date is one-way.\n\nRules:\n- is_flight_request is false if the message is not about finding a flight.\n- Copy city or airport names as the user wrote them; do not guess a city that was not mentioned.\n- If the user says \"from home\", \"my usual airport\" or similar, set uses_home_airport true and origin null.\n- passengers defaults to 1 and cabin to \"economy\" when not stated.\n- List in `missing` any of origin, destination, depart_date that the user did not give\n  (do not list origin when uses_home_airport is true). A month without a day (\"in March\") counts as missing depart_date.\n",
+      "prompt": "cheap flight somewhere warm",
+      "response": {
+        "is_flight_request": true,
+        "origin": null,
+        "destination": null,
+        "depart_date": null,
+        "return_date": null,
+        "passengers": 1,
+        "cabin": "economy",
+        "uses_home_airport": false,
+        "missing": [
+          "origin",
+          "destination",
+          "depart_date"
+        ]
+      },
+      "stop_reason": "end_turn",
+      "input_tokens": 1215,
+      "output_tokens": 84,
+      "cost_usd": 0.000163,
+      "duration_ms": 1095.1,
+      "span": "parse"
+    }
+  ],
+  "tool_calls": [
+    {
+      "span": "load_memory",
+      "tool": "load_preferences",
+      "input": null,
+      "output": {
+        "home_airport": null,
+        "max_stops": null,
+        "checked_bags": 0
+      },
+      "duration_ms": null,
+      "error": null
+    }
+  ],
+  "totals": {
+    "duration_ms": 1132.3,
+    "cost_usd": 0.00016,
+    "input_tokens": 1215,
+    "output_tokens": 84,
+    "llm_calls": 1,
+    "tool_calls": 1,
+    "web_searches": 0,
+    "steps": 3,
+    "from_cache": false
+  },
+  "result": {
+    "status": "needs_clarification",
+    "message": "Could you tell me where you're flying from and where you're going and the exact departure date?",
+    "top_offers": [],
+    "dropped": []
+  }
+}

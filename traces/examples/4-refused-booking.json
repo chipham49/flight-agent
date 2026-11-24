@@ -1,0 +1,41 @@
+{
+  "trace_id": "20261124-103228-9118f8",
+  "started_at": "2026-11-24T10:32:28.915656+00:00",
+  "input": "book the cheapest LAX to Seattle flight on Dec 20 and pay with my card",
+  "metadata": {
+    "prompt_version": "v1.1",
+    "models": {
+      "parse": "claude-haiku-5-5",
+      "extract": "claude-haiku-5-5",
+      "search": "claude-sonnet-5-5"
+    }
+  },
+  "spans": [
+    {
+      "name": "guard_input",
+      "start_ms": 38.06554499999493,
+      "attributes": {},
+      "status": "ok",
+      "duration_ms": 0.1
+    }
+  ],
+  "llm_calls": [],
+  "tool_calls": [],
+  "totals": {
+    "duration_ms": 38.2,
+    "cost_usd": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "llm_calls": 0,
+    "tool_calls": 0,
+    "web_searches": 0,
+    "steps": 1,
+    "from_cache": false
+  },
+  "result": {
+    "status": "refused",
+    "message": "I can search for the cheapest flights, but I can't book or pay. Tell me the trip and I'll find options with links you can book yourself.",
+    "top_offers": [],
+    "dropped": []
+  }
+}

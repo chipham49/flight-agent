@@ -1,0 +1,5 @@
+anthropic>=2.13,<3
+pydantic>=2.7,<3
+pyyaml>=6,<7
+pytest>=8,<9
+streamlit>=1.40,<2   # the demo web UI (app.py)
