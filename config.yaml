@@ -1,0 +1,51 @@
+# Flight agent settings. No secrets here: the API key comes from the
+# ANTHROPIC_API_KEY environment variable.
+
+prompt_version: v1
+
+models:
+  parse: claude-haiku-5-5      # cheap + fast: turns text into a structured trip
+  extract: claude-haiku-5-5    # cheap + fast: turns search notes into flight records
+  search: claude-sonnet-5-5    # stronger: decides what to search and reads results
+
+effort:
+  parse: low
+  extract: low
+  search: medium
+
+# Price per 1M tokens in USD (used to compute cost per run)
+pricing:
+  claude-haiku-5-5: {input: 0.10, output: 0.50, cache_read: 0.01}
+  claude-sonnet-5-5: {input: 2.00, output: 10.00, cache_read: 0.10}
+  claude-sonnet-5: {input: 2.00, output: 10.00, cache_read: 0.20}
+  web_search_per_1000: 10.00
+
+limits:
+  max_steps: 12             # whole workflow
+  max_clarifications: 2     # questions back to the user
+  max_web_searches: 6       # per search call
+  max_search_attempts: 2    # first try + 1 fallback
+  max_pause_continuations: 3
+  timeout_seconds: 120
+  max_input_chars: 500
+  top_n: 3
+
+cache:
+  enabled: true
+  ttl_minutes: 30
+  path: .cache/search_cache.json
+
+memory:
+  path: memory/preferences.json
+
+traces:
+  dir: traces
+
+currency:
+  base: USD
+  # Approximate rates, used only to show prices in USD. Update before use.
+  rates_to_usd: {USD: 1.0, EUR: 1.08, GBP: 1.27, JPY: 0.0066, CAD: 0.73, AUD: 0.66, VND: 0.000039}
+
+knowledge:
+  dir: knowledge
+  top_k: 3
