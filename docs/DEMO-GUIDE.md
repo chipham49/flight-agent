@@ -99,11 +99,10 @@ and run **LAX → New York** once so the cache is warm (do this within 30 minute
 | **0:20–1:20** Live run | Click **🌲 SFO → Seattle** (fresh, ~30 s), then **✈️ LAX → New York** (cached) | "It understood my text, used my saved preference of 1 bag, searched the web, and added the bag fee from its airline knowledge base. Every price has a source link and warnings. Running a trip again uses the cache: about 1 second and almost free, compared with 30 seconds and 7 cents." |
 | | Click **📅 Past date** and **🛑 Booking request** | "Guardrails: a past date is rejected and a booking request is refused before any money is spent." |
 | **1:20–2:00** Trace | Scroll to **How the agent worked**, open **Full trace file** | "Every run is traced: each step, each tool call, each AI call with its prompt, tokens, time and cost. Here's the search step: 6 web searches, the extract step, and the bag-fee lookup." |
-| **2:00–2:40** Evals | Open `evals/results/compare_v1_v2.md` on GitHub | "I test it with a fixed set of cases and automatic scoring. Version 1 failed on X; I fixed it, and version 2 improved Y. 30 automatic tests run on every pull request." |
+| **2:00–2:40** Evals | Open the README "Results" table on GitHub | "I test it with 8 fixed cases and automatic scoring. Version 1 passed 6 of 8: it forgot my home airport and gave up on Denver to Las Vegas. I fixed both. The eval then caught a side effect of my fix, prices with no airline, and a new guardrail fixed that. Version 3 passes 8 of 8, and 33 automatic tests run on every pull request." |
 | **2:40–3:00** Next steps | README "Next steps" | "Next: a real flight-price API, flexible dates, and price alerts." |
 
-If evals haven't been run yet, show the **Tests** instead: run `python -m pytest -q` in the terminal
-(30 passed), and say the eval dataset is ready in `evals/dataset.jsonl`.
+Eval files are in `evals/results/` (v1, v2, v3 and `compare_v1_v3.md`).
 
 ---
 
@@ -116,7 +115,7 @@ If evals haven't been run yet, show the **Tests** instead: run `python -m pytest
 | 3. Tools | Web search, airport lookup, bag-fee lookup, currency table, cache: see "Tool calls" in the app |
 | 4. RAG | `knowledge/` (10 airline notes + general rules) + `flight_agent/rag/`: the bag-fee column in results |
 | 5. Observability | "How the agent worked" panel, `traces/examples/*.json` |
-| 6. Evaluation | `evals/` (dataset, scorer, v1 vs v2 compare), `tests/` (30 tests), CI on GitHub |
+| 6. Evaluation | README "Results": v1 75% → v3 100%; `evals/` (dataset, scorer, compare + regression check), `tests/` (33 tests), CI on GitHub |
 | 7. Guardrails | Past date, booking, vague examples; "Offers rejected by the guardrails" list |
 | 8. Cost | Time and $ on every run, cache (1 s vs 30 s), cheap model for simple steps |
 | 9. Production | `config.yaml`, `.env.example`, `Dockerfile`, CI, tests, web UI |
@@ -137,7 +136,7 @@ Sample traces you can open on GitHub, in `traces/examples/`:
 
 ## 5. Before you submit (checklist)
 
-- [ ] Run the evals (costs about $0.50 for the quick set) and fill in the README "Results" table. Ask Claude Code to do it.
+- [x] Run the evals and fill in the README "Results" table (done: v1 75% → v3 100%).
 - [ ] Spot-check 3 prices on Google Flights and write the result in the README ("Manual check").
 - [ ] Merge the pull request into `main` on GitHub.
 - [ ] Make sure no API key is in the repo. It never is in the code: it only lives in the `FLIGHT_AGENT_API_KEY` setting.

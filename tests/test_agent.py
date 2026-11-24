@@ -134,3 +134,24 @@ def test_nonstop_flight_gets_no_layover_warning():
     # Seen live: nonstop flights came back with layover_minutes=0 and a "short layover" warning.
     state, _ = go("LAX to NYC Dec 10", FakeLLM(trip(), [offer(stops=0, layover_minutes=0)]))
     assert not any("layover" in w for w in state.top_offers[0].warnings)
+
+
+def test_filled_field_wrongly_listed_as_missing_is_ignored():
+    # Eval v1 (mem-01): the model gave destination "Seattle" but also listed it as missing.
+    save_preferences(Preferences(home_airport="SFO"))
+    parsed = trip(origin=None, destination="Seattle", uses_home_airport=True, missing=["destination"])
+    state, _ = go("from my usual airport to Seattle", FakeLLM(parsed, [offer(origin="SFO", destination="SEA")]))
+    assert state.status == "done"
+
+
+def test_route_wide_from_price_gets_a_clear_warning():
+    # Eval v1 (fee-01): route pages only show "from $52"; v2 reports them, clearly labelled.
+    state, _ = go("LAX to NYC Dec 10", FakeLLM(trip(), [offer(fare_type="from-price")]))
+    assert any("not confirmed for your date" in w for w in state.top_offers[0].warnings)
+
+
+def test_offer_without_an_airline_is_dropped():
+    # Eval v2 (fee-01): travel-site "from $50" prices came back with airline "not specified".
+    state, _ = go("LAX to NYC Dec 10", FakeLLM(trip(), [offer(), offer(airline="not specified", price=50)]))
+    assert [o.airline for o in state.top_offers] == ["Delta"]
+    assert any("no airline named" in d for d in state.dropped)

@@ -1,7 +1,7 @@
 # Flight agent settings. No secrets here: the API key comes from the
 # ANTHROPIC_API_KEY environment variable.
 
-prompt_version: v1.1   # v1.1: parse keeps a year the user states (so past dates get rejected)
+prompt_version: v2     # v2: search may report labelled route-wide "from" prices (eval fix for fee-01)
 
 models:
   parse: claude-haiku-5-5      # cheap + fast: turns text into a structured trip
