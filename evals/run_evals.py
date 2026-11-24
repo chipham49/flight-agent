@@ -1,7 +1,11 @@
 """Run every test case through the real agent and score it automatically.
 
-    python -m evals.run_evals --version v1            # all 15 cases (~$1-3, needs FLIGHT_AGENT_API_KEY)
+    python -m evals.run_evals --version v1            # quick set: 8 cases (~$0.50, needs FLIGHT_AGENT_API_KEY)
+    python -m evals.run_evals --version v1 --all      # all 15 cases (~$1.50)
     python -m evals.run_evals --version v1 --cases grd-01,vag-01
+
+To keep runs cheap, evals use the limits in the `evals:` section of config.yaml
+(fewer web searches, no retry) and stop early if the run passes max_cost_usd.
 
 Writes evals/results/<version>.json (every detail) and <version>.md (summary table).
 Dates in the dataset are relative ({d+21} = 21 days from today) so cases never go stale.
@@ -64,6 +68,7 @@ def summarize(results: list[dict]) -> dict:
     seconds = [r["seconds"] for r in results if r["expect"] == "results"]
     return {
         "cases": len(results),
+        "eval_limits": "max 3 web searches, no retry",
         "pass_rate": round(100 * sum(r["passed"] for r in results) / len(results), 1),
         "behaviour_accuracy": rate("behaviour"),
         "route_accuracy": rate("route"),
@@ -101,7 +106,8 @@ def write_markdown(path: Path, version: str, summary: dict, results: list[dict])
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--version", required=True, help="label for this run, e.g. v1")
-    ap.add_argument("--cases", help="comma-separated case ids to run (default: all)")
+    ap.add_argument("--cases", help="comma-separated case ids to run (default: the quick set)")
+    ap.add_argument("--all", action="store_true", help="run all 15 cases instead of the quick set")
     args = ap.parse_args()
 
     today = date.today()
@@ -109,6 +115,14 @@ def main():
     if args.cases:
         wanted = set(args.cases.split(","))
         cases = [c for c in cases if c["id"] in wanted]
+    elif not args.all:
+        cases = [c for c in cases if c.get("quick")]
+
+    # Cheaper limits for evals (load_config() is cached, so the agent sees these changes)
+    cfg = load_config()
+    cfg["limits"]["max_web_searches"] = cfg["evals"]["max_web_searches"]
+    cfg["limits"]["max_search_attempts"] = cfg["evals"]["max_search_attempts"]
+    max_cost = cfg["evals"]["max_cost_usd"]
 
     original_prefs = load_preferences()
     results = []
@@ -122,6 +136,10 @@ def main():
             results.append(r)
             print(f"   -> {r['status']} | {'PASS' if r['passed'] else 'FAIL'} | ${r['cost_usd']:.3f} | {r['seconds']}s",
                   flush=True)
+            spent = sum(x["cost_usd"] for x in results)
+            if spent > max_cost:  # safety stop so a run can never eat the budget
+                print(f"\nStopped early: spent ${spent:.2f}, over the ${max_cost:.2f} limit in config.yaml")
+                break
     finally:
         save_preferences(original_prefs)  # put the user's real preferences back
 

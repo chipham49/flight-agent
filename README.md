@@ -125,7 +125,10 @@ python -m flight_agent "from my usual airport to Seattle on December 20"
 python -m pytest -q
 ```
 
-**Evals** (real API calls, about $1–3 per run)
+**Evals** (real API calls). The default quick set has 8 cases and costs about $0.50: 4 flight searches
+(domestic, international, bag fee, memory) and 4 behaviour checks (vague, past date, booking, injection).
+Evals use 3 web searches per search and no retry, and stop if a run spends more than $1.50
+(see `evals:` in `config.yaml`). Add `--all` for all 15 cases (about $1.50).
 
 ```bash
 python -m evals.run_evals --version v1
@@ -151,7 +154,7 @@ _Filled in after the eval runs: see `evals/results/v1.md`, `evals/results/v2.md`
 
 | Metric | v1 | v2 |
 |---|---|---|
-| Pass rate (15 cases) | – | – |
+| Pass rate (8-case quick set) | – | – |
 | Route accuracy | – | – |
 | Citation rate | – | – |
 | Avg cost per search | – | – |
