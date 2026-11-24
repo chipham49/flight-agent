@@ -82,11 +82,13 @@ at most once, web search is capped at 6 queries per call, and clarifying questio
 
 ## Run it
 
-**1. Add your API key** as an environment variable named `ANTHROPIC_API_KEY`. Never commit it.
-In a Claude Code cloud session, add it in the environment settings. Locally:
+**1. Add your API key** as an environment variable named `FLIGHT_AGENT_API_KEY`
+(`ANTHROPIC_API_KEY` also works locally). Never commit it.
+In a Claude Code cloud session, add it in the environment settings as `FLIGHT_AGENT_API_KEY`:
+cloud sessions reserve `ANTHROPIC_*` names for Claude Code itself. Locally:
 
 ```bash
-export ANTHROPIC_API_KEY=your-key-here
+export FLIGHT_AGENT_API_KEY=your-key-here
 ```
 
 **2. Install**
@@ -140,7 +142,7 @@ docker build -t flight-agent .
 ```
 
 ```bash
-docker run -e ANTHROPIC_API_KEY flight-agent "LAX to New York on December 15"
+docker run -e FLIGHT_AGENT_API_KEY flight-agent "LAX to New York on December 15"
 ```
 
 ## Results

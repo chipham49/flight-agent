@@ -8,21 +8,20 @@ Other commands:
   python -m flight_agent --check-key                     test the API key (free: lists models)
 """
 import argparse
-import os
 import sys
 
-from .config import load_config
+from .config import API_BASE_URL, api_key, load_config
 from .store import load_preferences, save_preferences
 
 
 def check_key():
-    """Free check that ANTHROPIC_API_KEY works and can see the models in config.yaml."""
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        sys.exit("ANTHROPIC_API_KEY is not set in this shell. Add it as an environment variable (see README).")
+    """Free check that the API key works and can see the models in config.yaml."""
+    if not api_key():
+        sys.exit("No API key found. Set FLIGHT_AGENT_API_KEY (or ANTHROPIC_API_KEY when running locally); see README.")
     import anthropic
 
     try:
-        available = {m.id for m in anthropic.Anthropic().models.list()}
+        available = {m.id for m in anthropic.Anthropic(api_key=api_key(), base_url=API_BASE_URL).models.list()}
     except anthropic.AuthenticationError:
         sys.exit("The API key was rejected (401). Check it was copied fully and is not revoked.")
     except anthropic.PermissionDeniedError:
@@ -64,8 +63,8 @@ def main():
     if not args.trip:
         ap.print_help()
         return
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        sys.exit("ANTHROPIC_API_KEY is not set. Add it as an environment variable (see README).")
+    if not api_key():
+        sys.exit("No API key found. Set FLIGHT_AGENT_API_KEY (or ANTHROPIC_API_KEY when running locally); see README.")
 
     from .agent import run  # imported here so --help works without dependencies configured
 

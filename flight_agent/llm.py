@@ -8,7 +8,7 @@ import time
 
 import anthropic
 
-from .config import load_config
+from .config import API_BASE_URL, api_key, load_config
 
 
 def cost_of(model: str, usage) -> float:
@@ -32,8 +32,9 @@ class LLM:
     """Thin wrapper around the Anthropic SDK. Tests swap this for a fake."""
 
     def __init__(self, tracer, client: anthropic.Anthropic | None = None):
-        # Anthropic() reads ANTHROPIC_API_KEY from the environment. Never hardcode it.
-        self.client = client or anthropic.Anthropic(max_retries=2, timeout=90)
+        # The key comes from an environment variable (see config.api_key). Never hardcode it.
+        self.client = client or anthropic.Anthropic(
+            api_key=api_key(), base_url=API_BASE_URL, max_retries=2, timeout=90)
         self.tracer = tracer
         self.cfg = load_config()
 

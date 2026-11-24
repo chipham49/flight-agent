@@ -1,6 +1,6 @@
 """Run every test case through the real agent and score it automatically.
 
-    python -m evals.run_evals --version v1            # all 15 cases (~$1-3, needs ANTHROPIC_API_KEY)
+    python -m evals.run_evals --version v1            # all 15 cases (~$1-3, needs FLIGHT_AGENT_API_KEY)
     python -m evals.run_evals --version v1 --cases grd-01,vag-01
 
 Writes evals/results/<version>.json (every detail) and <version>.md (summary table).
