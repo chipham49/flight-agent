@@ -74,6 +74,14 @@ def test_past_date_is_rejected():
     assert state.status == "refused" and "past" in state.message
 
 
+def test_past_year_is_kept_even_if_model_moves_it_forward():
+    # Seen live: the model turned "January 5 2020" into 2027-01-05.
+    llm = FakeLLM(trip(depart_date="2027-01-05"), [offer()])
+    state, _ = go("LAX to Boston on January 5 2020", llm)
+    assert state.status == "refused" and "2020-01-05" in state.message
+    assert llm.calls["search"] == 0  # no money spent searching
+
+
 def test_missing_info_asks_a_question():
     state, _ = go("cheap flight to london", FakeLLM(trip(origin=None, depart_date=None, missing=["origin", "depart_date"]), []))
     assert state.status == "needs_clarification"
@@ -93,6 +101,14 @@ def test_cache_skips_second_search():
     go("LAX to NYC Dec 10", llm)
     state, _ = go("LAX to NYC Dec 10", llm)
     assert llm.calls["search"] == 1 and llm.calls["extract"] == 1
+    assert state.from_cache
+
+
+def test_no_cache_run_still_fills_cache_for_next_run():
+    llm = FakeLLM(trip(), [offer()])
+    go("LAX to NYC Dec 10", llm, use_cache=False)  # like --no-cache: search fresh...
+    state, _ = go("LAX to NYC Dec 10", llm)        # ...then a normal run reuses it
+    assert llm.calls["search"] == 1
     assert state.from_cache
 
 

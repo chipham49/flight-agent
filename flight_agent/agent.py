@@ -70,6 +70,7 @@ def load_memory(state: AgentState, ctx: Context):
         state.message = state.clarifying_question
         return
 
+    guardrails.keep_stated_year(state.user_input, p)  # backstop if the model changed the user's year
     errors = guardrails.validate_trip(p, ctx.today)
     if errors:
         state.status, state.message = "refused", " ".join(errors)
@@ -132,8 +133,9 @@ def search(state: AgentState, ctx: Context):
             found = {"notes": guardrails.sanitize_web_text(notes), "urls": urls, "cited": cited}
             _load_offers(state, ctx, found)
             if state.offers:
-                if ctx.use_cache:
-                    cache_put(key, found)
+                # Always save fresh results: --no-cache only skips READING the cache,
+                # so the next normal run can reuse this search.
+                cache_put(key, found)
                 return
 
     stale = cache_get(key, max_age_minutes=24 * 60) if ctx.use_cache else None

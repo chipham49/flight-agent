@@ -3,7 +3,8 @@
 PARSE_SYSTEM = """You turn a traveller's message into structured trip details.
 
 Today's date is {today}. Resolve relative dates ("next Friday", "Dec 10") to YYYY-MM-DD,
-choosing the next future occurrence. A trip with no return date is one-way.
+choosing the next future occurrence. If the user states a year, keep that exact year,
+even if the date is in the past (never move it into the future). A trip with no return date is one-way.
 
 Rules:
 - is_flight_request is false if the message is not about finding a flight.

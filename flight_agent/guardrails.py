@@ -14,7 +14,8 @@ DISCLAIMER = "Prices change fast. Confirm on the source site before booking."
 BOOKING_WORDS = re.compile(
     # "book a flight to X" is treated as a search request; these phrases ask us to actually buy.
     r"\b(book (it|this|that|them|one of (them|these))|purchase (it|this|the|a)|buy (it|this|the ticket)|"
-    r"pay for|checkout|check out for me|reserve (it|this|that))\b", re.I)
+    r"pay for|pay (with|using|by)|(credit|debit|my) card|checkout|check out for me|reserve (it|this|that))\b",
+    re.I)
 PAYMENT_DATA = re.compile(r"\b(?:\d[ -]?){13,19}\b|\bcvv\b|\bcard number\b|\bpassport (number|no)\b", re.I)
 INJECTION = re.compile(
     r"ignore (all |any )?(previous|prior|above) (instructions|rules)|system prompt|you are now|"
@@ -39,6 +40,17 @@ def check_input(text: str, max_chars: int) -> tuple[str, str] | None:
         return "refused", ("I can search for the cheapest flights, but I can't book or pay. "
                            "Tell me the trip and I'll find options with links you can book yourself.")
     return None
+
+
+def keep_stated_year(text: str, parsed: ParsedTrip) -> None:
+    """If the user wrote exactly one year (e.g. "Jan 5 2020") but the model moved the date
+    to another year, put the user's year back. Then validate_trip can reject a past date."""
+    years = set(re.findall(r"\b(?:19|20)\d{2}\b", text))
+    if len(years) != 1 or not parsed.depart_date:
+        return
+    year = years.pop()
+    if not parsed.depart_date.startswith(year):
+        parsed.depart_date = year + parsed.depart_date[4:]  # "2027-01-05" -> "2020-01-05"
 
 
 def validate_trip(parsed: ParsedTrip, today: date) -> list[str]:

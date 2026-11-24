@@ -12,6 +12,7 @@ def test_input_guardrails():
     assert guardrails.check_input("x" * 600, 500)[0] == "refused"
     assert guardrails.check_input("my card is 4111 1111 1111 1111", 500)[0] == "refused"
     assert guardrails.check_input("book it for me", 500)[0] == "refused"
+    assert guardrails.check_input("book the cheapest LAX to SEA flight and pay with my card", 500)[0] == "refused"
     assert guardrails.check_input("book a flight LAX to NYC Dec 10", 500) is None  # = a search request
     assert guardrails.check_input("LAX to NYC on 2026-12-10", 500) is None
 
