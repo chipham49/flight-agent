@@ -128,3 +128,9 @@ def test_trace_is_saved_with_spans_and_totals(temp_files):
         assert step in names
     assert saved["totals"]["steps"] == 7
     assert any(t["tool"] == "lookup_airport" for t in saved["tool_calls"])
+
+
+def test_nonstop_flight_gets_no_layover_warning():
+    # Seen live: nonstop flights came back with layover_minutes=0 and a "short layover" warning.
+    state, _ = go("LAX to NYC Dec 10", FakeLLM(trip(), [offer(stops=0, layover_minutes=0)]))
+    assert not any("layover" in w for w in state.top_offers[0].warnings)

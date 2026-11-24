@@ -123,7 +123,7 @@ def check_offer(offer: FlightOffer, query: TripQuery, searched_urls: list[str],
         offer.warnings.append("Price not quoted word-for-word in the source text; double-check it")
     if offer.fare_type and "basic" in offer.fare_type.lower():
         offer.warnings.append("Basic economy: no seat choice, no changes; some airlines exclude carry-on")
-    if offer.layover_minutes is not None and offer.layover_minutes < 60:
+    if offer.layover_minutes and offer.layover_minutes < 60:  # 0 = nonstop, so no warning
         offer.warnings.append(f"Short layover ({offer.layover_minutes} min): risk of missed connection")
     if offer.layover_minutes is not None and offer.layover_minutes >= 8 * 60:
         offer.warnings.append(f"Long layover ({offer.layover_minutes // 60} h): may need a hotel")

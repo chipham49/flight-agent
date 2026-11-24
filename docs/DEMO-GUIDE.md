@@ -21,7 +21,29 @@ Every run writes a **trace file**, a full diary of what happened, how long it to
 
 ---
 
-## 2a. Easiest: let Claude Code run it for you
+## 2. Run the demo from Claude Code on the web (cloud)
+
+Open **claude.ai/code**, pick the **flight-agent** repository and the environment that has your
+`FLIGHT_AGENT_API_KEY`, then type one of these requests. Claude runs everything in the cloud and
+sends you the results.
+
+| You want | Type this to Claude |
+|---|---|
+| A demo video of the web page | *Start the app with `streamlit run app.py --server.headless true`, then run `node demo/record_demo.js` and send me `demo/output/demo.webm`.* |
+| A search, as text | *Run `python -m flight_agent "LAX to New York on December 15"` and show me the output.* |
+| Screenshots of the page | *Start the app and send me screenshots of a search for LAX to New York.* |
+| A trace explained | *Open the newest trace in `traces/` and explain each step in simple words.* |
+| The tests | *Run `python -m pytest -q`.* |
+
+Note: an app started in the cloud can't open in your own browser (localhost is the cloud computer).
+That's why Claude records a video or takes screenshots for you. The video takes about 2 minutes to
+make and costs about $0.08.
+
+**Recording your demo from the cloud:** start your screen recorder, then play `demo.webm` and talk over
+it using the script in section 3. Or record yourself typing the requests above in claude.ai/code:
+that also shows how you built and tested the agent with an AI coding agent.
+
+## 2a. On your own computer: let Claude Code run it for you
 
 1. Install the **Claude desktop app** from **claude.ai/download** and sign in.
 2. Download the project: on GitHub click **Code → Download ZIP**, then unzip it (e.g. to your Desktop).
@@ -77,11 +99,11 @@ and run **LAX → New York** once so the cache is warm (do this within 30 minute
 | **0:20–1:20** Live run | Click **🌲 SFO → Seattle** (fresh, ~30 s), then **✈️ LAX → New York** (cached) | "It understood my text, used my saved preference of 1 bag, searched the web, and added the bag fee from its airline knowledge base. Every price has a source link and warnings. Running a trip again uses the cache: about 1 second and almost free, compared with 30 seconds and 7 cents." |
 | | Click **📅 Past date** and **🛑 Booking request** | "Guardrails: a past date is rejected and a booking request is refused before any money is spent." |
 | **1:20–2:00** Trace | Scroll to **How the agent worked**, open **Full trace file** | "Every run is traced: each step, each tool call, each AI call with its prompt, tokens, time and cost. Here's the search step: 6 web searches, the extract step, and the bag-fee lookup." |
-| **2:00–2:40** Evals | Open `evals/results/compare_v1_v2.md` on GitHub | "I test it with a fixed set of cases and automatic scoring. Version 1 failed on X; I fixed it, and version 2 improved Y. 29 automatic tests run on every pull request." |
+| **2:00–2:40** Evals | Open `evals/results/compare_v1_v2.md` on GitHub | "I test it with a fixed set of cases and automatic scoring. Version 1 failed on X; I fixed it, and version 2 improved Y. 30 automatic tests run on every pull request." |
 | **2:40–3:00** Next steps | README "Next steps" | "Next: a real flight-price API, flexible dates, and price alerts." |
 
 If evals haven't been run yet, show the **Tests** instead: run `python -m pytest -q` in the terminal
-(29 passed), and say the eval dataset is ready in `evals/dataset.jsonl`.
+(30 passed), and say the eval dataset is ready in `evals/dataset.jsonl`.
 
 ---
 
@@ -94,7 +116,7 @@ If evals haven't been run yet, show the **Tests** instead: run `python -m pytest
 | 3. Tools | Web search, airport lookup, bag-fee lookup, currency table, cache: see "Tool calls" in the app |
 | 4. RAG | `knowledge/` (10 airline notes + general rules) + `flight_agent/rag/`: the bag-fee column in results |
 | 5. Observability | "How the agent worked" panel, `traces/examples/*.json` |
-| 6. Evaluation | `evals/` (dataset, scorer, v1 vs v2 compare), `tests/` (29 tests), CI on GitHub |
+| 6. Evaluation | `evals/` (dataset, scorer, v1 vs v2 compare), `tests/` (30 tests), CI on GitHub |
 | 7. Guardrails | Past date, booking, vague examples; "Offers rejected by the guardrails" list |
 | 8. Cost | Time and $ on every run, cache (1 s vs 30 s), cheap model for simple steps |
 | 9. Production | `config.yaml`, `.env.example`, `Dockerfile`, CI, tests, web UI |
