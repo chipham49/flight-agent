@@ -55,7 +55,8 @@ def load_memory(state: AgentState, ctx: Context):
     ctx.tracer.tool_call("load_preferences", None, prefs.model_dump())
 
     origin = p.origin
-    missing = list(p.missing)
+    # The model sometimes lists a field as missing even though it filled it in: trust the value.
+    missing = [m for m in p.missing if not getattr(p, m, None)]
     if (p.uses_home_airport or not origin) and prefs.home_airport:
         origin = prefs.home_airport
         missing = [m for m in missing if m != "origin"]

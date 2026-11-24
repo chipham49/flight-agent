@@ -33,4 +33,18 @@ def api_key() -> str | None:
     for name in KEY_NAMES:
         if os.environ.get(name):
             return os.environ[name]
+    return _key_from_env_file()
+
+
+def _key_from_env_file() -> str | None:
+    """Fallback: read the key from a .env file in the project folder (git ignores .env).
+    Lines look like FLIGHT_AGENT_API_KEY=sk-ant-..."""
+    env_file = ROOT / ".env"
+    if not env_file.exists():
+        return None
+    for line in env_file.read_text(encoding="utf-8").splitlines():
+        name, _, value = line.partition("=")
+        value = value.strip().strip('"').strip("'")
+        if name.strip() in KEY_NAMES and value and value != "your-key-here":
+            return value
     return None

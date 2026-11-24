@@ -10,6 +10,8 @@ from .airports import same_place
 from .state import FlightOffer, ParsedTrip, TripQuery
 
 DISCLAIMER = "Prices change fast. Confirm on the source site before booking."
+# Placeholder "airlines" that travel-site route pages produce when no airline is named
+NO_AIRLINE = {"", "not specified", "unspecified", "unknown", "various", "multiple", "multiple airlines", "n/a", "none"}
 
 BOOKING_WORDS = re.compile(
     # "book a flight to X" is treated as a search request; these phrases ask us to actually buy.
@@ -102,6 +104,8 @@ def _price_strings(price: float) -> list[str]:
 def check_offer(offer: FlightOffer, query: TripQuery, searched_urls: list[str],
                 cited_texts: list[str], max_stops: int | None) -> str | None:
     """Return a reason to DROP the offer, or None if it is valid. Also sets flags/warnings."""
+    if (offer.airline or "").strip().lower() in NO_AIRLINE:  # found by eval v2 (fee-01)
+        return f"${offer.price}: no airline named, so it can't be booked or get a bag fee"
     if not url_was_seen(offer.source_url, searched_urls):
         return f"{offer.airline} ${offer.price}: source link was not in the search results"
     if not 0 < offer.price < 50_000:
@@ -121,9 +125,11 @@ def check_offer(offer: FlightOffer, query: TripQuery, searched_urls: list[str],
     offer.price_verified = any(s in cited for s in _price_strings(offer.price))
     if not offer.price_verified:
         offer.warnings.append("Price not quoted word-for-word in the source text; double-check it")
+    if offer.fare_type and "from-price" in offer.fare_type.lower():
+        offer.warnings.append("Lowest advertised price for this route, not confirmed for your date")
     if offer.fare_type and "basic" in offer.fare_type.lower():
         offer.warnings.append("Basic economy: no seat choice, no changes; some airlines exclude carry-on")
-    if offer.layover_minutes is not None and offer.layover_minutes < 60:
+    if offer.layover_minutes and offer.layover_minutes < 60:  # 0 = nonstop, so no warning
         offer.warnings.append(f"Short layover ({offer.layover_minutes} min): risk of missed connection")
     if offer.layover_minutes is not None and offer.layover_minutes >= 8 * 60:
         offer.warnings.append(f"Long layover ({offer.layover_minutes // 60} h): may need a hotel")

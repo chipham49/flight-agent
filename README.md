@@ -78,7 +78,7 @@ at most once, web search is capped at 6 queries per call, and clarifying questio
 | 3. Tools | Claude web search, airport lookup (`airports.py`), bag-fee RAG (`rag/`), currency conversion and cache (`store.py`) |
 | 4. RAG | `knowledge/*.md` + `rag/retriever.py`: section chunking, query rewriting (synonyms), airline metadata filter, BM25 ranking, citations |
 | 5. Observability | `tracing.py`: per-run trace with spans, every LLM call (full prompt, response, tokens, cost), every tool call; sample traces in `traces/examples/`; trace viewer in the web UI |
-| 6. Evaluation | `evals/`: 15-case dataset, automatic scoring, v1 vs v2 comparison with a regression gate; `tests/`: 28 tests run in CI |
+| 6. Evaluation | `evals/`: 15-case dataset, automatic scoring, v1 vs v2 comparison with a regression gate; `tests/`: 33 tests run in CI |
 | 7. Guardrails | `guardrails.py`: input checks, web-text sanitising, offer validation, output check; refusal fallback model; fallback chain |
 | 8. Performance & cost | Cost and latency measured per run; 30-minute cache; Haiku on cheap steps; prompt caching on the search prompt |
 | 9. Production | Modular package, `config.yaml`, env-var secrets, `Dockerfile`, GitHub Actions CI, web UI (`app.py`) |
@@ -94,6 +94,9 @@ cloud sessions reserve `ANTHROPIC_*` names for Claude Code itself. Locally:
 ```bash
 export FLIGHT_AGENT_API_KEY=your-key-here
 ```
+
+Or, easier: copy `.env.example` to a file named `.env` in the project folder and put your key in it.
+The agent reads it automatically, and git ignores `.env`, so the key is never uploaded.
 
 **2. Install**
 
@@ -122,6 +125,10 @@ streamlit run app.py
 Opens http://localhost:8501: search box, example buttons (including the tricky inputs), preferences,
 results with bag fees and sources, and a "How the agent worked" panel (steps, tool calls, model calls,
 time, cost, full trace). A "Past runs" tab lists every trace.
+
+**Demo video from a cloud session** (where localhost isn't reachable): start the app with
+`streamlit run app.py --server.headless true`, then run `node demo/record_demo.js`.
+It saves a captioned walkthrough to `demo/output/demo.webm` (about $0.08).
 
 **Preferences (memory)**
 
@@ -164,15 +171,40 @@ docker run -e FLIGHT_AGENT_API_KEY flight-agent "LAX to New York on December 15"
 
 ## Results
 
-_Filled in after the eval runs: see `evals/results/v1.md`, `evals/results/v2.md` and `evals/results/compare_v1_v2.md`._
+Automatic evals on the 8-case quick set (4 flight searches + vague, past date, booking, injection),
+run live on Nov 24 2026 with eval limits (3 web searches, no retry). Full details:
+`evals/results/v1.md`, `v2.md`, `v3.md` and `compare_v1_v3.md`.
 
-| Metric | v1 | v2 |
+| Metric | v1 | v2 | v3 |
+|---|---|---|---|
+| Pass rate (8 cases) | 75% | 88% | 100% |
+| Right behaviour (search / ask / refuse) | 75% | 100% | 100% |
+| Route accuracy | 75% | 100% | 100% |
+| Search cases with results | 50% | 100% | 100% |
+| Every price has a source link | 50% | 100% | 100% |
+| Bag fee added (RAG case) | 0% | 0% | 100% |
+| Offers dropped by guardrails | 0 | 0 | 4 |
+| Avg cost per search case | $0.032 | $0.051 | $0.042 |
+| Median seconds per search case | 18 s | 27 s | 29 s |
+| Total cost of the eval run | $0.128 | $0.203 | $0.170 |
+
+**What changed between versions (each fix found by the eval, with a test added):**
+
+| Version | Failure the eval found | Fix |
 |---|---|---|
-| Pass rate (8-case quick set) | – | – |
-| Route accuracy | – | – |
-| Citation rate | – | – |
-| Avg cost per search | – | – |
-| Median seconds per search | – | – |
+| v1 → v2 | **mem-01:** "from my usual airport" asked a question: the model filled in "Seattle" but also listed it as missing | Code trusts filled-in fields over the model's "missing" list |
+| v1 → v2 | **fee-01:** Denver → Las Vegas gave no results: only route-wide "from $52" prices existed | Prompt v2 allows them, labelled `from-price`, with a "not confirmed for your date" warning |
+| v2 → v3 | **fee-01:** the v2 fix let in travel-site prices with **no airline** ("not specified"): no bag fee possible, nothing to book | New guardrail drops offers without a named airline |
+
+A first v2 run (`v2-rate-limited.md`) failed 2 searches because the web-search tool returned a
+"server tool use limit exceeded" error. The agent reported "no results" honestly instead of inventing
+prices. Traces now record web-search error codes (`search_errors`) so this is easy to spot.
+
+**Honest caveats:** these are single runs of 8 cases and web search varies between runs, so treat
+the numbers as evidence, not a guarantee. "Price quoted word-for-word in the source" stayed at 0%:
+search snippets rarely quote the price exactly, so every price carries a "double-check" warning.
+v3 is slower and a little more expensive per search ($0.042 vs $0.032) because it now finds and
+checks more offers.
 
 **Manual check:** for 3 trips, the agent's cheapest price compared with Google Flights: _to fill in_.
 

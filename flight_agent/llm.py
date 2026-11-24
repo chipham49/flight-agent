@@ -70,6 +70,7 @@ class LLM:
                   "max_uses": limits["max_web_searches"]}]
         messages = [{"role": "user", "content": user}]
         notes, urls, cited, total_cost = [], [], [], 0.0
+        search_errors = []  # error codes from the web search tool (e.g. rate limits), for the trace
 
         # pause_turn means the server-side search loop paused; resume a bounded number of times.
         for _ in range(limits["max_pause_continuations"] + 1):
@@ -90,6 +91,8 @@ class LLM:
             for block in response.content:
                 if block.type == "web_search_tool_result" and isinstance(block.content, list):
                     urls += [r.url for r in block.content if getattr(r, "url", None)]
+                elif block.type == "web_search_tool_result":  # the search itself failed
+                    search_errors.append(getattr(block.content, "error_code", "unknown"))
                 elif block.type == "text":
                     notes.append(block.text)
                     for c in getattr(block, "citations", None) or []:
@@ -101,7 +104,7 @@ class LLM:
                 step="search", model=response.model, system=system, prompt=user,
                 response="\n".join(notes), stop_reason=response.stop_reason,
                 input_tokens=response.usage.input_tokens, output_tokens=response.usage.output_tokens,
-                web_searches=_searches(response.usage), cost_usd=round(cost, 6),
+                web_searches=_searches(response.usage), search_errors=search_errors, cost_usd=round(cost, 6),
                 duration_ms=round((time.perf_counter() - started) * 1000, 1),
             )
             if response.stop_reason == "refusal":
